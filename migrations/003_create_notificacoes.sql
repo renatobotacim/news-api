@@ -1,0 +1,16 @@
+CREATE TABLE IF NOT EXISTS notificacoes (
+  id CHAR(36) NOT NULL DEFAULT (UUID()),
+  tenant_id CHAR(36) NOT NULL,
+  titulo VARCHAR(150) NOT NULL,
+  mensagem TEXT NOT NULL,
+  tipo VARCHAR(30) NOT NULL,
+  link_acao VARCHAR(500) NULL,
+  enviado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  expira_em TIMESTAMP NULL DEFAULT NULL,
+  ativo TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_notificacoes_tenant_ativo_expira (tenant_id, ativo, expira_em),
+  CONSTRAINT fk_notificacoes_tenant FOREIGN KEY (tenant_id) REFERENCES tenants (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
